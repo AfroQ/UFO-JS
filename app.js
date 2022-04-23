@@ -28,49 +28,25 @@ let filters = {}
 
 // 3. Use this function to update the filters. 
 function updateFilters() {
-    filters = {}
+    filters = {};
     // 4a. Save the element that was changed as a variable.
-    // let changed_elements = d3.selectAll("input")
-    // changed_elements.forEach(element => {
-      
-    //   console.log(element)
-    // });
+    let element = d3.select(this);
 
-    let date = d3.select("#datetime");
-    let city = d3.select("#city");
-    let state = d3.select("#state");
-    let country = d3.select("#country");
-    let shape = d3.select("#shape");
-    // 4b. Save the value that was changed as a variable.
-    let dateV = date.property("value");
-    let cityV = city.property("value");
-    let stateV = state.property("value");
-    let countryV = country.property("value");
-    let shapeV = shape.property("value");
+    // 4b. Save the value that was changed as a variable
+    let elementValue = element.property("value");
+
     // 4c. Save the id of the filter that was changed as a variable.
-    let dateId = date.attr("id");
-    let cityId = city.attr("id");
-    let stateId = state.attr("id");
-    let countryId = country.attr("id");
-    let shapeId = shape.attr("id");
+    let elementId = element.attr("id");
     
     // 5. If a filter value was entered then add that filterId and value
     // to the filters list. Otherwise, clear that filter from the filters object.
-    if (dateV){
-      filters[dateId] = dateV
+    if (elementValue) {
+      filters[elementId] = elementValue;
     }
-    if (cityV){
-      filters[cityId] = cityV
+    else {
+      delete filters[elementId];
     }
-    if (stateV){
-      filters[stateId] = stateV
-    }
-    if (countryV){
-      filters[countryId] = countryV
-    }
-    if (shapeV){
-      filters[shapeId] = shapeV
-    }
+ 
     console.log(filters)
   
     // 6. Call function to apply all filters and rebuild the table
@@ -89,14 +65,14 @@ function updateFilters() {
     Object.entries(filters).forEach(([k,v])=>{
       console.log(k,v)
       filteredData = filteredData.filter(row => row[k] === v);
-    })
+    });
     
     // 10. Finally, rebuild the table using the filtered data
     buildTable(filteredData);
   }
   
   // 2. Attach an event to listen for changes to each filter
-  d3.selectAll("#filter-btn").on("click",updateFilters);
+  d3.selectAll("input").on("change",updateFilters);
   
   
   // Build the table when the page loads
